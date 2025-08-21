@@ -1,5 +1,4 @@
 import type { MarkdownBulletListMarker, MarkdownEmphasisIndicator, MarkdownStrongEmphasisIndicator } from "../contract/MarkdownSpec";
-import type { SlugifyMode } from "../contract/SlugifyMode";
 
 /**
  * A map from our configuration keys to the corresponding type definitions.
@@ -59,7 +58,6 @@ export interface IConfigurationKeyTypeMap {
     "toc.omittedFromToc": { [path: string]: string[] };
     "toc.orderedList": boolean;
     "toc.plaintext": boolean;
-    "toc.slugifyMode": SlugifyMode;
     "toc.unorderedList.marker": MarkdownBulletListMarker;
     "toc.updateOnSave": boolean;
 }

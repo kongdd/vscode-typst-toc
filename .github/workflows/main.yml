@@ -15,7 +15,6 @@ on:
       - ".*"
       - "package*.json"
       - "tsconfig.json"
-      - "webpack.*"
       - "!**.md"
   workflow_dispatch:
   repository_dispatch:
@@ -42,7 +41,6 @@ jobs:
 
       - name: "Install dependencies"
         run: |
-          npm run build-wasm
           npm ci
 
       # Our prepublish script runs in production mode by default.
@@ -59,10 +57,10 @@ jobs:
         with:
           run: npm test
 
-      - name: "Rust test"
-        run: |
-          cd ./src/zola-slug/
-          cargo test --release
+      # - name: "Rust test"
+      #   run: |
+      #     cd ./src/zola-slug/
+      #     cargo test --release
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4

@@ -672,8 +672,6 @@
     "scripts": {
         "vscode:prepublish": "npm run build",
         "build": "node ./build/build.js",
-        "build-wasm": "cd ./src/zola-slug && wasm-pack build --release",
-        "dev-build": "webpack --mode development",
         "dev-compile": "tsc --build --watch --verbose",
         "pretest": "tsc --build",
         "test": "node ./out/test/runTest.js"
@@ -688,8 +686,7 @@
         "markdown-it": "^13.0.2",
         "markdown-it-github-alerts": "^0.1.2",
         "markdown-it-task-lists": "^2.1.1",
-        "string-similarity": "^4.0.4",
-        "zola-slug": "file:./src/zola-slug/pkg"
+        "string-similarity": "^4.0.4"
     },
     "devDependencies": {
         "@types/glob": "^7.2.0",
