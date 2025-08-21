@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
+  <!-- 白色背景 -->
+  <rect x="0" y="0" width="256" height="256" fill="#FFFFFF"/>
+
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <!-- 软角括号（加粗） -->
+    <path d="M92 64H62 Q42 64 42 84 V172 Q42 192 62 192 H92" stroke="#111111" stroke-width="18"/>
+    <path d="M164 64H194 Q214 64 214 84 V172 Q214 192 194 192 H164" stroke="#111111" stroke-width="18"/>
+
+    <!-- 线描 T（更粗以突出主体） -->
+    <path d="M96 96H160 M128 96V192" stroke="#111111" stroke-width="22"/>
+  </g>
+</svg>

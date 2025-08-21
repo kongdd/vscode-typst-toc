@@ -1,8 +1,8 @@
 {
-    "name": "typst-toc-numering",
+    "name": "typst-title-numering",
     "displayName": "%ext.displayName%",
     "description": "%ext.description%",
-    "icon": "images/Markdown-mark.png",
+    "icon": "images/typst-mark.png",
     "version": "0.1.1",
     "publisher": "kongdd",
     "engines": {

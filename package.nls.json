@@ -1,6 +1,6 @@
 {
-    "ext.displayName": "Typst All in One",
-    "ext.description": "All you need to write Markdown (keyboard shortcuts, table of contents, auto preview and more)",
+    "ext.displayName": "Typst Title Numbering",
+    "ext.description": "Typst title automatically numbering",
     "command.toc.create.title": "Create Table of Contents",
     "command.toc.update.title": "Update Table of Contents",
     "command.toc.addSecNumbers.title": "Add/Update section numbers",

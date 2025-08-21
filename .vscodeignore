@@ -30,4 +30,5 @@ welcome/WELCOMED
 
 # VS Code maps local image paths to GitHub paths
 images
-!images/Markdown-mark.png
+# !images/Markdown-mark.png
+!images/typst-mark.png
