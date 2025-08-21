@@ -634,14 +634,6 @@
                 }
             }
         },
-        "markdown.markdownItPlugins": true,
-        "markdown.previewStyles": [
-            "./media/checkbox.css",
-            "./node_modules/katex/dist/katex.min.css",
-            "./node_modules/markdown-it-github-alerts/styles/github-colors-light.css",
-            "./node_modules/markdown-it-github-alerts/styles/github-colors-dark-media.css",
-            "./node_modules/markdown-it-github-alerts/styles/github-base.css"
-        ],
         "grammars": [
             {
                 "scopeName": "markdown.math_display",
