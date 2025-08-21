@@ -5,7 +5,6 @@ import * as path from 'path';
 import { CancellationToken, CodeLens, CodeLensProvider, commands, EndOfLine, ExtensionContext, languages, Position, Range, TextDocument, TextDocumentWillSaveEvent, TextEditor, Uri, window, workspace, WorkspaceEdit } from 'vscode';
 
 // import { commonMarkEngine, mdEngine, Token } from './markdownEngine';
-// import { isMdDocument, Document_Selector_Markdown, Regexp_Fenced_Code_Block } from "./util/generic";
 // import type * as MarkdownSpec from "./contract/MarkdownSpec";
 import * as vscode from "vscode";
 
@@ -68,7 +67,6 @@ export function activate(context: ExtensionContext) {
         commands.registerCommand('typst.extension.toc.addSecNumbers', addSectionNumbers),
         commands.registerCommand('typst.extension.toc.removeSecNumbers', removeSectionNumbers),
         // workspace.onWillSaveTextDocument(onWillSave),
-        // languages.registerCodeLensProvider(Document_Selector_Markdown, new TocCodeLensProvider())
     );
 }
 
