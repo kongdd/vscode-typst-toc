@@ -4,7 +4,7 @@ import * as vscode from "vscode";
 
 //#region Constant
 
-export const Test_Workspace_Path = vscode.Uri.file(path.resolve(__dirname, "..", "..", "..", "..", "test"));
+export const Test_Workspace_Path = vscode.Uri.file(path.resolve(__dirname, "../../../../build/"));
 export const Test_Md_File_Path = vscode.Uri.joinPath(Test_Workspace_Path, "test.md");
 
 //#endregion Constant

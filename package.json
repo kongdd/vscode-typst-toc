@@ -214,21 +214,21 @@
         "grammars": [
             {
                 "scopeName": "markdown.math_display",
-                "path": "./syntaxes/math_display.markdown.tmLanguage.json",
+                "path": "./build/syntaxes/math_display.markdown.tmLanguage.json",
                 "injectTo": [
                     "text.html.markdown"
                 ]
             },
             {
                 "scopeName": "markdown.math_inline",
-                "path": "./syntaxes/math_inline.markdown.tmLanguage.json",
+                "path": "./build/syntaxes/math_inline.markdown.tmLanguage.json",
                 "injectTo": [
                     "text.html.markdown"
                 ]
             },
             {
                 "scopeName": "text.katex",
-                "path": "./syntaxes/katex.tmLanguage.json"
+                "path": "./build/syntaxes/katex.tmLanguage.json"
             }
         ]
     },
