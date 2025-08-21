@@ -11,6 +11,9 @@
             "request": "launch",
             "runtimeExecutable": "${execPath}",
             "args": [
+                // "--disable-extensions",
+                // "--enable-extensions='myriad-dreamin.tinymist'",
+                "--user-data-dir=${workspaceFolder}/.vscode-test/data",
                 "--extensionDevelopmentPath=${workspaceFolder}"
             ],
             "outFiles": [

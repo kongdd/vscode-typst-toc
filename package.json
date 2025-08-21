@@ -1,5 +1,5 @@
 {
-    "name": "typst-title-numering",
+    "name": "typst-toc-numering",
     "displayName": "%ext.displayName%",
     "description": "%ext.description%",
     "icon": "images/typst-mark.png",
@@ -73,45 +73,38 @@
         },
         "keybindings": [
             {
+                "key": "ctrl+shift+u",
+                "command": "typst.extension.toc.addSecNumbers",
+                "when": "editorLangId =~ /rmd|quarto|markdown|typst/"
+            },
+            {
+                "key": "ctrl+i",
+                "command": "typst.extension.editing._wrapBy",
+                "when": "editorLangId =~ /rmd|quarto|markdown|typst/",
+                "args": {
+                    "before": "*",
+                    "after": "*"
+                }
+            },
+            {
+                "key": "ctrl+u",
+                "command": "typst.extension.editing._wrapBy",
+                "when": "editorLangId == 'rmd' || editorLangId == 'qmd' || editorLangId == 'markdown'",
+                "args": {
+                    "before": "<u>",
+                    "after": "</u>"
+                }
+            },
+            {
                 "command": "typst.extension.editing.toggleBold",
                 "key": "ctrl+b",
                 "mac": "cmd+b",
                 "when": "editorTextFocus && !editorReadonly && editorLangId =~ /^markdown$|^rmd$|^quarto$/"
             },
             {
-                "command": "typst.extension.editing.toggleItalic",
-                "key": "ctrl+i",
-                "mac": "cmd+i",
-                "when": "editorTextFocus && !editorReadonly && editorLangId =~ /^markdown$|^rmd$|^quarto$/"
-            },
-            {
                 "command": "typst.extension.editing.toggleStrikethrough",
                 "key": "alt+s",
                 "when": "editorTextFocus && !editorReadonly && editorLangId =~ /^markdown$|^rmd$|^quarto$/ && !isMac"
-            },
-            {
-                "command": "typst.extension.editing.toggleHeadingUp",
-                "key": "ctrl+shift+]",
-                "mac": "ctrl+shift+]",
-                "when": "editorTextFocus && !editorReadonly && editorLangId =~ /^markdown$|^rmd$|^quarto$/"
-            },
-            {
-                "command": "typst.extension.editing.toggleHeadingDown",
-                "key": "ctrl+shift+[",
-                "mac": "ctrl+shift+[",
-                "when": "editorTextFocus && !editorReadonly && editorLangId =~ /^markdown$|^rmd$|^quarto$/"
-            },
-            {
-                "command": "typst.extension.editing.toggleMath",
-                "key": "ctrl+m",
-                "mac": "cmd+m",
-                "when": "editorTextFocus && !editorReadonly && editorLangId =~ /^markdown$|^rmd$|^quarto$/"
-            },
-            {
-                "command": "typst.extension.editing.paste",
-                "key": "ctrl+v",
-                "mac": "cmd+v",
-                "when": "editorTextFocus && editorLangId =~ /^markdown$|^rmd$|^quarto$/ && editorHasSelection"
             }
         ],
         "configuration": {

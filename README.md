@@ -7,11 +7,41 @@
 [![GitHub Contributors](https://img.shields.io/github/contributors/yzhang-gh/vscode-markdown.svg?style=flat-square)](https://github.com/yzhang-gh/vscode-markdown/graphs/contributors)
 
 
+## 1 User
+
+```typst
+// = LEVEL1 hidden
+// = LEVEL1 hidden
+// = LEVEL1 hidden
+
+$ y = x + 1 $
+
+== LEVEL2 // <!-- omit in toc -->
+
+== LEVEL2 // <!-- omit in toc -->
+
+== LEVEL2 // <!-- omit in toc -->
+
+== 3.1 LEVEL2
+
+== 3.2 LEVEL2
+
+== 3.3 LEVEL2
+
+== 3.4 LEVEL2
+
+== 3.5 LEVEL2
+
+=== 3.5.1 LEVEL3
+
+```
+
+
+## 2 Developer
+
 ```
 npm install
-npm run build
-npm test
+npm run build | npm test
 
-vsce package
-code --install-extension .\typst-toc-numering-0.1.1.vsix
+vsce package | code --install-extension .\typst-toc-numering-0.1.1.vsix
 ```

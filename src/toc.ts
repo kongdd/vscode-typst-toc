@@ -103,15 +103,10 @@ function addSectionNumbers() {
         const secNumStr = [...Array(level - startDepth + 1).keys()].map(num => `${secNumbers[num + startDepth - 1]}`).join('.');
 
         const lineText = doc.lineAt(lineNum).text;
-        // /^\s{0,3}[=#]/.test(lineText)
         if (/^[=#]/.test(lineText)) {
             const newText = lineText.replace(/^(\s{0,3}[=#]+ +)((?:\d{1,9}\.?)* )?(.*)/, (_, g1, _g2, g3) => `${g1}${secNumStr} ${g3}`);
             edit.replace(doc.uri, doc.lineAt(lineNum).range, newText);
         }
-        // const newText = /^[=#]/.test(lineText)
-        //     ? lineText.replace(/^(\s{0,3}[=#]+ +)((?:\d{1,9}\.?)* )?(.*)/, (_, g1, _g2, g3) => `${g1}${secNumStr} ${g3}`)
-        //     : lineText.replace(/^(\s{0,3})((?:\d{1,9}\.?)* )?(.*)/, (_, g1, _g2, g3) => `${g1}${secNumStr} ${g3}`);
-        // edit.replace(doc.uri, doc.lineAt(lineNum).range, newText);
     });
 
     return workspace.applyEdit(edit);
@@ -326,7 +321,7 @@ export function getAllRootHeading(doc: TextDocument, respectMagicCommentOmit: bo
         const crtLineText = lines[i];
 
         // <https://spec.commonmark.org/0.29/#atx-headings>
-        var ishead = /(^[#=]{1,6}\s)|(^\/\/ {0,3}[#=]{1,6}\s)/.test(crtLineText); // 匹配typst和markdown标题
+        var ishead = /(^[#=]{1,6}\s)|(^\/\/ {0,3}[#=]{1,6}(\s|$))/.test(crtLineText); // 匹配typst和markdown标题
 
         // Skip non-ATX heading lines.
         if (!ishead) continue;
@@ -361,10 +356,7 @@ export function getAllRootHeading(doc: TextDocument, respectMagicCommentOmit: bo
         // Omit because of `projectLevelOmittedHeadings`.
         if (respectProjectLevelOmit && entry.canInToc) {
             // Whether omitted as a subheading
-            if (
-                ignoredDepthBound !== undefined
-                && entry.level > ignoredDepthBound
-            ) {
+            if (ignoredDepthBound !== undefined && entry.level > ignoredDepthBound) {
                 entry.canInToc = false;
             }
 
