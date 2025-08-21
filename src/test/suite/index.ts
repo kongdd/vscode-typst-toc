@@ -18,7 +18,7 @@ export async function run(): Promise<void> {
 
 	// Load the test suite.
 	const testSuiteRoot = path.resolve(__dirname);
-	const globOptions: glob.IOptions = { cwd: testSuiteRoot };
+	const globOptions = { cwd: testSuiteRoot };
 
 	const unitTests = glob.sync("unit/**/*.test.js", globOptions);
 	const integrationTests = glob.sync("integration/**/*.test.js", globOptions);

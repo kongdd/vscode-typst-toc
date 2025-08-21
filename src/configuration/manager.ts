@@ -1,5 +1,5 @@
 import * as vscode from "vscode";
-import type IDisposable from "../IDisposable";
+import type IDisposable from "./IDisposable";
 import { Deprecated_Keys, Fallback_Map } from "./fallback";
 
 export type IConfigurationFallbackMap<M> = { [key in keyof M]?: (scope?: vscode.ConfigurationScope) => M[key] };

@@ -1,7 +1,7 @@
 'use strict';
 
 import * as path from 'path';
-import * as stringSimilarity from 'string-similarity';
+// import * as stringSimilarity from 'string-similarity';
 import { CancellationToken, CodeLens, CodeLensProvider, commands, EndOfLine, ExtensionContext, languages, Position, Range, TextDocument, TextDocumentWillSaveEvent, TextEditor, Uri, window, workspace, WorkspaceEdit } from 'vscode';
 
 // import { commonMarkEngine, mdEngine, Token } from './markdownEngine';
@@ -33,16 +33,13 @@ export function isMdDocument(doc: vscode.TextDocument | undefined): boolean {
 }
 
 
-
 type HeadingLevel = 1 | 2 | 3 | 4 | 5 | 6;
 
 /**
  * Represents the essential properties of a heading.
  */
 interface IHeadingBase {
-    /**
-     * The heading level.
-     */
+    /** The heading level. */
     level: HeadingLevel;
 
     /**
@@ -51,14 +48,10 @@ interface IHeadingBase {
      */
     rawContent: string;
 
-    /**
-     * The **zero-based** index of the beginning line of the heading in original document.
-     */
+    /** The **zero-based** index of the beginning line of the heading in original document. */
     lineIndex: number;
 
-    /**
-     * `true` to show in TOC. `false` to omit from TOC.
-     */
+    /** `true` to show in TOC. `false` to omit from TOC. */
     canInToc: boolean;
 }
 
@@ -146,16 +139,6 @@ function removeSectionNumbers() {
     return workspace.applyEdit(edit);
 }
 
-// function onWillSave(e: TextDocumentWillSaveEvent): void {
-//     if (!tocConfig.updateOnSave) {
-//         return;
-//     }
-//     if (isMdDocument(e.document)) {
-//         e.waitUntil(updateToc());
-//     }
-// }
-
-//#endregion TOC operation entrance
 
 /**
  * Returns a list of user defined excluded headings for the given document.
@@ -213,64 +196,6 @@ function getProjectExcludedHeadings(doc: TextDocument): readonly Readonly<{ leve
     });
 }
 
-/**
- * Generates the Markdown text representation of the TOC.
- */
-// TODO: Redesign data structure to solve another bunch of bugs.
-async function generateTocText(doc: TextDocument): Promise<string> {
-    const orderedListMarkerIsOne: boolean = workspace.getConfiguration('markdown.extension.orderedList').get<string>('marker') === 'one';
-
-    const toc: string[] = [];
-    const tocEntries: readonly Readonly<IHeadingBase>[] = getAllTocEntry(doc, { respectMagicCommentOmit: true, respectProjectLevelOmit: true })
-        .filter(i => i.canInToc && i.level >= tocConfig.startDepth && i.level <= tocConfig.endDepth); // Filter out excluded headings.
-
-    if (tocEntries.length === 0) {
-        return '';
-    }
-
-    // The actual level range of a document can be smaller than settings. So we need to calculate the real start level.
-    const startDepth = Math.max(tocConfig.startDepth, Math.min(...tocEntries.map(h => h.level)));
-    // Order counter for each heading level (from startDepth to endDepth), used only for ordered list
-    const orderCounter: number[] = new Array(tocConfig.endDepth - startDepth + 1).fill(0);
-
-    tocEntries.forEach(entry => {
-        const relativeLevel = entry.level - startDepth;
-        const currHeadingOrder = ++orderCounter[relativeLevel];
-        let indentationFix = '';
-        if (tocConfig.orderedList) {
-            const shift = orderCounter.slice(0, relativeLevel).map(c => String(c).length - 1).reduce((a, b) => a + b, 0);
-            indentationFix = ' '.repeat(shift);
-        }
-
-        const row = [
-            docConfig.tab.repeat(relativeLevel) + indentationFix,
-            (tocConfig.orderedList ? (orderedListMarkerIsOne ? '1' : currHeadingOrder) + '.' : tocConfig.listMarker) + ' ',
-            entry.rawContent // 直接使用原始内容
-        ];
-        toc.push(row.join(''));
-
-        // Reset order counter for its sub-headings
-        if (tocConfig.orderedList) {
-            orderCounter.fill(0, relativeLevel + 1);
-        }
-    });
-    while (/^[ \t]/.test(toc[0])) {
-        toc.shift();
-    }
-    toc.push(''); // Ensure the TOC text always ends with an EOL.
-    return toc.join(docConfig.eol);
-}
-
-
-function commonPrefixLength(s1: string, s2: string): number {
-    let minLength = Math.min(s1.length, s2.length);
-    for (let i = 0; i < minLength; i++) {
-        if (s1[i] !== s2[i]) {
-            return i;
-        }
-    }
-    return minLength;
-}
 
 /**
  * Updates `tocConfig` and `docConfig`.
@@ -474,6 +399,5 @@ export function getAllTocEntry(doc: TextDocument, {
     respectProjectLevelOmit?: boolean;
 }): readonly Readonly<IHeadingBase>[] {
     const rootHeadings: readonly Readonly<IHeadingBase>[] = getAllRootHeading(doc, respectMagicCommentOmit, respectProjectLevelOmit);
-
     return rootHeadings;
 }
