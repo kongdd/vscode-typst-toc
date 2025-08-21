@@ -4,9 +4,35 @@ import * as path from 'path';
 import * as stringSimilarity from 'string-similarity';
 import { CancellationToken, CodeLens, CodeLensProvider, commands, EndOfLine, ExtensionContext, languages, Position, Range, TextDocument, TextDocumentWillSaveEvent, TextEditor, Uri, window, workspace, WorkspaceEdit } from 'vscode';
 
-import { commonMarkEngine, mdEngine, Token } from './markdownEngine';
-import { isMdDocument, Document_Selector_Markdown, Regexp_Fenced_Code_Block } from "./util/generic";
+// import { commonMarkEngine, mdEngine, Token } from './markdownEngine';
+// import { isMdDocument, Document_Selector_Markdown, Regexp_Fenced_Code_Block } from "./util/generic";
 // import type * as MarkdownSpec from "./contract/MarkdownSpec";
+import * as vscode from "vscode";
+
+const enum LanguageIdentifier {
+    Html = "html",
+    Json = "json",
+    Markdown = "markdown",
+    PlainText = "plaintext",
+}
+
+const Regexp_Fenced_Code_Block = /^ {0,3}(?<fence>(?<char>[`~])\k<char>{2,})[^`\r\n]*$[^]*?^ {0,3}\k<fence>\k<char>* *$/gm;
+
+export function isMdDocument(doc: vscode.TextDocument | undefined): boolean {
+    if (doc) {
+        const extraLangIds = vscode.workspace.getConfiguration("markdown.extension").get<Array<string>>("extraLangIds");
+        const langId = doc.languageId;
+        if (extraLangIds?.includes(langId)) {
+            return true;
+        }
+        if (langId === LanguageIdentifier.Markdown) {
+            return true;
+        }
+    }
+    return false;
+}
+
+
 
 type HeadingLevel = 1 | 2 | 3 | 4 | 5 | 6;
 
@@ -34,17 +60,6 @@ interface IHeadingBase {
      * `true` to show in TOC. `false` to omit from TOC.
      */
     canInToc: boolean;
-}
-
-/**
- * Represents a heading.
- */
-export interface IHeading extends IHeadingBase {
-    /**
-     * The **rich text** (single line Markdown inline without raw HTML) representation of the rendering result (in strict CommonMark mode) of the heading.
-     * This must be able to be safely put into a `[]` bracket pair without breaking Markdown syntax.
-     */
-    visibleText: string;
 }
 
 /**
@@ -206,7 +221,7 @@ async function generateTocText(doc: TextDocument): Promise<string> {
     const orderedListMarkerIsOne: boolean = workspace.getConfiguration('markdown.extension.orderedList').get<string>('marker') === 'one';
 
     const toc: string[] = [];
-    const tocEntries: readonly Readonly<IHeading>[] = getAllTocEntry(doc, { respectMagicCommentOmit: true, respectProjectLevelOmit: true })
+    const tocEntries: readonly Readonly<IHeadingBase>[] = getAllTocEntry(doc, { respectMagicCommentOmit: true, respectProjectLevelOmit: true })
         .filter(i => i.canInToc && i.level >= tocConfig.startDepth && i.level <= tocConfig.endDepth); // Filter out excluded headings.
 
     if (tocEntries.length === 0) {
@@ -230,7 +245,7 @@ async function generateTocText(doc: TextDocument): Promise<string> {
         const row = [
             docConfig.tab.repeat(relativeLevel) + indentationFix,
             (tocConfig.orderedList ? (orderedListMarkerIsOne ? '1' : currHeadingOrder) + '.' : tocConfig.listMarker) + ' ',
-            entry.visibleText // 使用纯文本，不生成链接
+            entry.rawContent // 直接使用原始内容
         ];
         toc.push(row.join(''));
 
@@ -246,99 +261,6 @@ async function generateTocText(doc: TextDocument): Promise<string> {
     return toc.join(docConfig.eol);
 }
 
-/**
- * Returns an array of TOC ranges.
- * If no TOC is found, returns an empty array.
- * @param doc a TextDocument
- */
-async function detectTocRanges(doc: TextDocument): Promise<[Array<Range>, string]> {
-    const docTokens = (await mdEngine.getDocumentToken(doc)).tokens;
-    /**
-     * `[beginLineIndex, endLineIndex, openingTokenIndex]`
-     */
-    const candidateLists: readonly [number, number, number][] = docTokens.reduce<[number, number, number][]>((result, token, index) => {
-        if (
-            token.level === 0
-            && (
-                token.type === 'bullet_list_open'
-                || (token.type === 'ordered_list_open' && token.attrGet('start') === null)
-            )
-        ) {
-            result.push([...token.map!, index]);
-        }
-        return result;
-    }, []);
-
-    const tocRanges: Range[] = [];
-    const newTocText = await generateTocText(doc);
-
-    for (const item of candidateLists) {
-        const beginLineIndex = item[0];
-        let endLineIndex = item[1];
-        const opTokenIndex = item[2];
-
-        //// #525 <!-- no toc --> comment
-        if (
-            beginLineIndex > 0
-            && doc.lineAt(beginLineIndex - 1).text === '<!-- no toc -->'
-        ) {
-            continue;
-        }
-
-        // Check the first list item to see if it could be a TOC.
-        //
-        // ## Token stream
-        //
-        // +3 alway exists, even if it's an empty list.
-        // In a target, +3 is `inline`:
-        //
-        // opTokenIndex: *_list_open
-        // +1: list_item_open
-        // +2: paragraph_open
-        // +3: inline
-        // +4: paragraph_close
-        // ...
-        // ...: list_item_close
-        //
-        // ## `inline.children`
-        //
-        // Ordinary TOC: `link_open`, ..., `link_close`.
-        // Plain text TOC: No `link_*` tokens.
-
-        const firstItemContent = docTokens[opTokenIndex + 3];
-        if (firstItemContent.type !== 'inline') {
-            continue;
-        }
-
-        const tokens = firstItemContent.children!;
-        if (workspace.getConfiguration('markdown.extension.toc').get<boolean>('plaintext')) {
-            if (tokens.some(t => t.type.startsWith('link_'))) {
-                continue;
-            }
-        } else {
-            if (!(
-                tokens[0].type === 'link_open'
-                && tokens[0].attrGet('href')!.startsWith('#') // Destination begins with `#`. (#304)
-                && tokens.findIndex(t => t.type === 'link_close') === (tokens.length - 1) // Only one link. (#549, #683)
-            )) {
-                continue;
-            }
-        }
-
-        // The original range may have trailing white lines.
-        while (doc.lineAt(endLineIndex - 1).isEmptyOrWhitespace) {
-            endLineIndex--;
-        }
-
-        const finalRange = new Range(new Position(beginLineIndex, 0), new Position(endLineIndex, 0));
-        const listText = doc.getText(finalRange);
-        if (radioOfCommonPrefix(newTocText, listText) + stringSimilarity.compareTwoStrings(newTocText, listText) > 0.5) {
-            tocRanges.push(finalRange);
-        }
-    }
-
-    return [tocRanges, newTocText];
-}
 
 function commonPrefixLength(s1: string, s2: string): number {
     let minLength = Math.min(s1.length, s2.length);
@@ -348,18 +270,6 @@ function commonPrefixLength(s1: string, s2: string): number {
         }
     }
     return minLength;
-}
-
-function radioOfCommonPrefix(s1: string, s2: string): number {
-    let minLength = Math.min(s1.length, s2.length);
-    let maxLength = Math.max(s1.length, s2.length);
-
-    let prefixLength = commonPrefixLength(s1, s2);
-    if (prefixLength < minLength) {
-        return prefixLength / minLength;
-    } else {
-        return minLength / maxLength;
-    }
 }
 
 /**
@@ -394,48 +304,6 @@ function loadTocConfig(editor: TextEditor): void {
     } else {
         docConfig.tab = '\t';
     }
-}
-
-/**
- * Extracts those that can be rendered to visible text from a string of CommonMark **inline** structures,
- * to create a single line string which can be safely used as **link text**.
- *
- * The result cannot be directly used as the content of a paragraph,
- * since this function does not escape all sequences that look like block structures.
- *
- * We roughly take GitLab's `[[_TOC_]]` as reference.
- *
- * @param raw - The Markdown string.
- * @param env - The markdown-it environment sandbox (**mutable**).
- * @returns A single line string, which only contains plain textual content,
- * backslash escape, code span, and emphasis.
- */
-function createLinkText(raw: string, env: object): string {
-    const inlineTokens: Token[] = commonMarkEngine.engine.parseInline(raw, env)[0].children!;
-
-    return inlineTokens.reduce<string>((result, token) => {
-        switch (token.type) {
-            case "text":
-                return result + token.content.replace(/[&*<>\[\\\]_`]/g, "\\$&"); // Escape.
-            case "code_inline":
-                return result + token.markup + token.content + token.markup; // Emit as is.
-            case "strong_open":
-            case "strong_close":
-            case "em_open":
-            case "em_close":
-                return result + token.markup; // Preserve emphasis indicators.
-            case "link_open":
-            case "link_close":
-            case "image":
-            case "html_inline":
-                return result; // Discard them.
-            case "softbreak":
-            case "hardbreak":
-                return result + " "; // Replace line breaks with spaces.
-            default:
-                return result + token.content;
-        }
-    }, "");
 }
 
 //#region Public utility
@@ -604,45 +472,8 @@ export function getAllTocEntry(doc: TextDocument, {
 }: {
     respectMagicCommentOmit?: boolean;
     respectProjectLevelOmit?: boolean;
-}): Readonly<IHeading>[] {
+}): readonly Readonly<IHeadingBase>[] {
     const rootHeadings: readonly Readonly<IHeadingBase>[] = getAllRootHeading(doc, respectMagicCommentOmit, respectProjectLevelOmit);
-    const { env } = commonMarkEngine.getDocumentToken(doc);
 
-    const toc: IHeading[] = rootHeadings.map<IHeading>((heading): IHeading => ({
-        level: heading.level,
-        rawContent: heading.rawContent,
-        lineIndex: heading.lineIndex,
-        canInToc: heading.canInToc,
-
-        visibleText: createLinkText(heading.rawContent, env),
-    }));
-
-    return toc;
+    return rootHeadings;
 }
-
-//#endregion Public utility
-// class TocCodeLensProvider implements CodeLensProvider {
-//     public provideCodeLenses(document: TextDocument, _: CancellationToken):
-//         CodeLens[] | Thenable<CodeLens[]> {
-//         // VS Code asks for code lens as soon as a text editor is visible (atop the group that holds it), no matter whether it has focus.
-//         // Duplicate editor views refer to the same TextEditor, and the same TextDocument.
-//         const editor = window.visibleTextEditors.find(e => e.document === document)!;
-
-//         loadTocConfig(editor);
-
-//         const lenses: CodeLens[] = [];
-//         return detectTocRanges(document).then(tocRangesAndText => {
-//             const tocRanges = tocRangesAndText[0];
-//             const newToc = tocRangesAndText[1];
-//             for (let tocRange of tocRanges) {
-//                 let status = document.getText(tocRange).replace(/\r?\n|\r/g, docConfig.eol) === newToc ? 'up to date' : 'out of date';
-//                 lenses.push(new CodeLens(tocRange, {
-//                     arguments: [],
-//                     title: `Table of Contents (${status})`,
-//                     command: ''
-//                 }));
-//             }
-//             return lenses;
-//         });
-//     }
-// }
