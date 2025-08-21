@@ -1,7 +1,7 @@
 'use strict';
 
 import { commands, env, ExtensionContext, Position, Range, Selection, SnippetString, TextDocument, TextEditor, window, workspace, WorkspaceEdit } from 'vscode';
-import { fixMarker } from './listEditing';
+// import { fixMarker } from './listEditing';
 
 export function activate(context: ExtensionContext) {
     context.subscriptions.push(
@@ -215,7 +215,7 @@ function toggleList() {
         }
     }
 
-    return workspace.applyEdit(batchEdit).then(() => fixMarker(editor));
+    return workspace.applyEdit(batchEdit); //.then(() => fixMarker(editor));
 }
 
 function toggleListSingleLine(doc: TextDocument, line: number, wsEdit: WorkspaceEdit) {
