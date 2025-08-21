@@ -23,11 +23,6 @@ export interface IConfigurationKeyTypeMap {
 
     "math.enabled": boolean;
 
-    "orderedList.autoRenumber": boolean;
-    "orderedList.marker": "one" | "ordered";
-
-    "preview.autoShowPreviewToSide": boolean;
-
     "print.absoluteImgPath": boolean;
     "print.imgToBase64": boolean;
     "print.includeVscodeStylesheets": boolean;

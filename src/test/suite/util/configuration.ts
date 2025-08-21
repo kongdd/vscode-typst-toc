@@ -13,12 +13,7 @@ const Default_Config: readonly IConfigurationRecord[] = [
     ["typst.extension.toc.updateOnSave", true],
     ["typst.extension.toc.slugifyMode", "github"],
     ["typst.extension.toc.omittedFromToc", Object.create(null)],
-    ["typst.extension.preview.autoShowPreviewToSide", false],
-    ["typst.extension.orderedList.marker", "ordered"],
-    ["typst.extension.italic.indicator", "*"],
     ["typst.extension.bold.indicator", "**"],
-    ["typst.extension.tableFormatter.normalizeIndentation", false],
-    ["typst.extension.tableFormatter.delimiterRowNoPadding", false],
     ["editor.insertSpaces", true],
     ["editor.tabSize", 4],
 ];
