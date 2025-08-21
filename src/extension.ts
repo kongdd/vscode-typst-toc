@@ -7,6 +7,7 @@ import { ExtensionContext, languages } from 'vscode';
 // import { extendMarkdownIt } from "./markdown-it-plugin-provider";
 // import { config as configNls } from './nls';
 import * as toc from './toc';
+import * as fmt from './formatting';
 // import { importZolaSlug } from './util/slugify';
 
 export function activate(context: ExtensionContext) {
