@@ -1,5 +1,11 @@
 // Keep extension contributes.keybindings here. Comments allowed.
 [
+    // 加粗
+    {
+        "command": "typst.extension.editing.toggleBold",
+        "key": "ctrl+b",
+        "when": "editorLangId =~ /^(rmd|quarto|markdown)$/"
+    },
     // 删除线
     {
         "command": "typst.extension.editing.toggleStrikethrough",

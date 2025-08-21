@@ -76,6 +76,11 @@
                 "when": "editorLangId =~ /rmd|quarto|markdown|typst/"
             },
             {
+                "command": "typst.extension.editing.toggleBold",
+                "key": "ctrl+b",
+                "when": "editorLangId =~ /^(rmd|quarto|markdown)$/"
+            },
+            {
                 "command": "typst.extension.editing.toggleStrikethrough",
                 "key": "alt+s",
                 "when": "editorTextFocus && !editorReadonly && editorLangId =~ /^(rmd|quarto|markdown)$/"
@@ -123,6 +128,15 @@
                 "args": {
                     "before": "<span style='background-color:yellow'>",
                     "after": "</span>"
+                }
+            },
+            {
+                "command": "typst.extension.editing._wrapBy",
+                "key": "ctrl+b",
+                "when": "editorLangId =~ /^(typst)$/",
+                "args": {
+                    "before": "*",
+                    "after": "*"
                 }
             },
             {

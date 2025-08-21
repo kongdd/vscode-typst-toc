@@ -1,5 +1,15 @@
 // Keep extension contributes.keybindings here. Comments allowed.
 [
+    // 加粗
+    {
+        "command": "typst.extension.editing._wrapBy",
+        "key": "ctrl+b",
+        "when": "editorLangId =~ /^(typst)$/", 
+        "args": {
+            "before": "*",
+            "after": "*"
+        }
+    },
     // 倾斜
     {
         "key": "ctrl+i",
