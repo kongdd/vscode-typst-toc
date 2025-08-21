@@ -652,7 +652,7 @@ suite("TOC.", () => {
                 '---',
                 '# 1 Heading 1',
                 '##  1.1 Heading 1.1',
-                '   2 Heading 2',
+                '   Heading 2',
                 '===',
                 '```markdown',
                 '# _Heading 3',
