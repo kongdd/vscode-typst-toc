@@ -118,7 +118,7 @@
             "type": "object",
             "title": "%config.title%",
             "properties": {
-                "markdown.extension.bold.indicator": {
+                "typst.extension.bold.indicator": {
                     "type": "string",
                     "default": "**",
                     "markdownDescription": "%config.bold.indicator.description%",
@@ -127,12 +127,12 @@
                         "__"
                     ]
                 },
-                "markdown.extension.katex.macros": {
+                "typst.extension.katex.macros": {
                     "type": "object",
                     "default": {},
                     "description": "%config.katex.macros.description%"
                 },
-                "markdown.extension.math.enabled": {
+                "typst.extension.math.enabled": {
                     "type": "boolean",
                     "default": true,
                     "description": "%config.math.enabled%"
@@ -197,7 +197,7 @@
                     "default": true,
                     "description": "%config.toc.updateOnSave.description%"
                 },
-                "markdown.extension.extraLangIds": {
+                "typst.extension.extraLangIds": {
                     "type": "array",
                     "default": [],
                     "items": {

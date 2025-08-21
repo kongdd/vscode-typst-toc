@@ -33,7 +33,7 @@ enum EmphasisType {
 }
 
 function toggleEmphasis(type: EmphasisType) {
-    let indicator = workspace.getConfiguration('markdown.extension.' + EmphasisType[type].toLowerCase()).get<string>('indicator')!;
+    let indicator = workspace.getConfiguration('typst.extension.' + EmphasisType[type].toLowerCase()).get<string>('indicator')!;
     return styleByWrapping(indicator);
 }
 
@@ -322,7 +322,7 @@ function getNextListStart(current: ListMarker): ListMarker {
  */
 function getCandidateMarkers(): ListMarker[] {
     // read configArray from configuration and append space
-    let configArray = workspace.getConfiguration('markdown.extension.list.toggle').get<string[]>('candidate-markers');
+    let configArray = workspace.getConfiguration('typst.extension.list.toggle').get<string[]>('candidate-markers');
     if (!(configArray instanceof Array))
         return listMarkerDefaultMarkerArray;
     

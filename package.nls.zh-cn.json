@@ -35,7 +35,7 @@
     "config.print.onFileSave.description": "Markdown 文档保存后自动打印为 HTML。",
     "config.print.theme": "输出的 HTML 的样式主题（只影响代码块）。",
     "config.print.validateUrls.description": "启用/禁用打印 HTML 时的 URL 验证。",
-    "config.syntax.decorations.description": "（**已弃用**）改用 `#markdown.extension.theming.decoration.renderCodeSpan#`。请在 <https://github.com/yzhang-gh/vscode-markdown/issues/888> 查看细节。",
+    "config.syntax.decorations.description": "（**已弃用**）改用 `#typst.extension.theming.decoration.renderCodeSpan#`。请在 <https://github.com/yzhang-gh/vscode-markdown/issues/888> 查看细节。",
     "config.syntax.decorationFileSizeLimit.description": "如果文件大于这个尺寸（byte/B）, 我们不再渲染语法装饰器。",
     "config.syntax.plainTheme.description": "（**实验性**）请在 <https://github.com/yzhang-gh/vscode-markdown/issues/185> 报告问题。",
     "config.tableFormatter.enabled.description": "启用 [GitHub Flavored Markdown](https://github.github.com/gfm/) 表格格式化。",

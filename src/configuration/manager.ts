@@ -39,13 +39,13 @@ class ConfigurationManager<M> implements IConfigurationService<M> {
      */
     private async showWarning(deprecatedKeys: readonly string[]): Promise<void> {
         for (const key of deprecatedKeys) {
-            const value = vscode.workspace.getConfiguration("markdown.extension").get(key);
+            const value = vscode.workspace.getConfiguration("typst.extension").get(key);
             if (value !== undefined && value !== null) {
                 // We are not able to localize this string for now.
                 // Our NLS module needs to be configured before using, which is done in the extension entry point.
                 // This module may be directly or indirectly imported by the entry point.
                 // Thus, this module may be loaded before the NLS module is available.
-                vscode.window.showErrorMessage(`The setting 'markdown.extension.${key}' has been deprecated.`);
+                vscode.window.showErrorMessage(`The setting 'typst.extension.${key}' has been deprecated.`);
             }
         }
     }
@@ -55,12 +55,12 @@ class ConfigurationManager<M> implements IConfigurationService<M> {
         if (fallback) {
             return fallback(scope);
         } else {
-            return vscode.workspace.getConfiguration("markdown.extension", scope).get<M[K]>(key as string)!;
+            return vscode.workspace.getConfiguration("typst.extension", scope).get<M[K]>(key as string)!;
         }
     }
 
     public getByAbsolute<T>(section: string, scope?: vscode.ConfigurationScope): T | undefined {
-        if (section.startsWith("markdown.extension.")) {
+        if (section.startsWith("typst.extension.")) {
             return this.get(section.slice(19) as any, scope) as any;
         } else {
             return vscode.workspace.getConfiguration(undefined, scope).get<T>(section);
