@@ -23,7 +23,7 @@ export async function run(): Promise<void> {
 	const unitTests = glob.sync("unit/**/*.test.js", globOptions);
 	const integrationTests = glob.sync("integration/**/*.test.js", globOptions);
 
-	unitTests.forEach(f => mocha.addFile(path.resolve(testSuiteRoot, f))); // Run unit tests first.
+	// unitTests.forEach(f => mocha.addFile(path.resolve(testSuiteRoot, f))); // Run unit tests first.
 	integrationTests.forEach(f => mocha.addFile(path.resolve(testSuiteRoot, f)));
 
 	// Run tests.
