@@ -3,11 +3,12 @@
 import * as path from 'path';
 import * as stringSimilarity from 'string-similarity';
 import { CancellationToken, CodeLens, CodeLensProvider, commands, EndOfLine, ExtensionContext, languages, Position, Range, TextDocument, TextDocumentWillSaveEvent, TextEditor, Uri, window, workspace, WorkspaceEdit } from 'vscode';
+
 import { commonMarkEngine, mdEngine, Token } from './markdownEngine';
 import { isMdDocument, Document_Selector_Markdown, Regexp_Fenced_Code_Block } from "./util/generic";
-import { slugify } from "./util/slugify";
-import type * as MarkdownSpec from "./contract/MarkdownSpec";
-import SlugifyMode from "./contract/SlugifyMode";
+// import type * as MarkdownSpec from "./contract/MarkdownSpec";
+
+type HeadingLevel = 1 | 2 | 3 | 4 | 5 | 6;
 
 /**
  * Represents the essential properties of a heading.
@@ -16,7 +17,7 @@ interface IHeadingBase {
     /**
      * The heading level.
      */
-    level: MarkdownSpec.MarkdownHeadingLevel;
+    level: HeadingLevel;
 
     /**
      * The raw content of the heading according to the CommonMark Spec.
@@ -44,13 +45,6 @@ export interface IHeading extends IHeadingBase {
      * This must be able to be safely put into a `[]` bracket pair without breaking Markdown syntax.
      */
     visibleText: string;
-
-    /**
-     * The anchor ID of the heading.
-     * This must be a valid IRI fragment, which does not contain `#`.
-     * See RFC 3986 section 3, and RFC 3987 section 2.2.
-     */
-    slug: string;
 }
 
 /**
@@ -61,65 +55,16 @@ const tocConfig = { startDepth: 1, endDepth: 6, listMarker: '-', orderedList: fa
 
 export function activate(context: ExtensionContext) {
     context.subscriptions.push(
-        commands.registerCommand('markdown.extension.toc.create', createToc),
-        commands.registerCommand('markdown.extension.toc.update', updateToc),
+        // commands.registerCommand('markdown.extension.toc.create', createToc),
+        // commands.registerCommand('markdown.extension.toc.update', updateToc),
         commands.registerCommand('markdown.extension.toc.addSecNumbers', addSectionNumbers),
         commands.registerCommand('markdown.extension.toc.removeSecNumbers', removeSectionNumbers),
-        workspace.onWillSaveTextDocument(onWillSave),
-        languages.registerCodeLensProvider(Document_Selector_Markdown, new TocCodeLensProvider())
+        // workspace.onWillSaveTextDocument(onWillSave),
+        // languages.registerCodeLensProvider(Document_Selector_Markdown, new TocCodeLensProvider())
     );
 }
 
 //#region TOC operation entrance
-
-async function createToc() {
-    const editor = window.activeTextEditor;
-
-    if (!editor || !isMdDocument(editor.document)) {
-        return;
-    }
-
-    loadTocConfig(editor);
-
-    let toc = await generateTocText(editor.document);
-    await editor.edit(function (editBuilder) {
-        editBuilder.delete(editor.selection);
-        editBuilder.insert(editor.selection.active, toc);
-    });
-}
-
-async function updateToc() {
-    const editor = window.activeTextEditor;
-
-    if (!editor || !isMdDocument(editor.document)) {
-        return;
-    }
-
-    loadTocConfig(editor);
-
-    const doc = editor.document;
-    const tocRangesAndText = await detectTocRanges(doc);
-    const tocRanges = tocRangesAndText[0];
-    const newToc = tocRangesAndText[1];
-
-    await editor.edit(editBuilder => {
-        for (const tocRange of tocRanges) {
-            if (tocRange !== null) {
-                const oldToc = doc.getText(tocRange).replace(/\r?\n|\r/g, docConfig.eol);
-                if (oldToc !== newToc) {
-                    const unchangedLength = commonPrefixLength(oldToc, newToc);
-                    const newStart = doc.positionAt(doc.offsetAt(tocRange.start) + unchangedLength);
-                    const replaceRange = tocRange.with(newStart);
-                    if (replaceRange.isEmpty) {
-                        editBuilder.insert(replaceRange.start, newToc.substring(unchangedLength));
-                    } else {
-                        editBuilder.replace(replaceRange, newToc.substring(unchangedLength));
-                    }
-                }
-            }
-        }
-    });
-}
 
 function addSectionNumbers() {
     const editor = window.activeTextEditor;
@@ -186,14 +131,14 @@ function removeSectionNumbers() {
     return workspace.applyEdit(edit);
 }
 
-function onWillSave(e: TextDocumentWillSaveEvent): void {
-    if (!tocConfig.updateOnSave) {
-        return;
-    }
-    if (isMdDocument(e.document)) {
-        e.waitUntil(updateToc());
-    }
-}
+// function onWillSave(e: TextDocumentWillSaveEvent): void {
+//     if (!tocConfig.updateOnSave) {
+//         return;
+//     }
+//     if (isMdDocument(e.document)) {
+//         e.waitUntil(updateToc());
+//     }
+// }
 
 //#endregion TOC operation entrance
 
@@ -285,7 +230,7 @@ async function generateTocText(doc: TextDocument): Promise<string> {
         const row = [
             docConfig.tab.repeat(relativeLevel) + indentationFix,
             (tocConfig.orderedList ? (orderedListMarkerIsOne ? '1' : currHeadingOrder) + '.' : tocConfig.listMarker) + ' ',
-            tocConfig.plaintext ? entry.visibleText : `[${entry.visibleText}](#${entry.slug})`
+            entry.visibleText // 使用纯文本，不生成链接
         ];
         toc.push(row.join(''));
 
@@ -582,7 +527,7 @@ export function getAllRootHeading(doc: TextDocument, respectMagicCommentOmit: bo
      * Keep track of the omitted heading's depth to also omit its subheadings.
      * This is only for project level omitting.
      */
-    let ignoredDepthBound: MarkdownSpec.MarkdownHeadingLevel | undefined = undefined;
+    let ignoredDepthBound: HeadingLevel | undefined = undefined;
 
     const toc: IHeadingBase[] = [];
 
@@ -598,7 +543,7 @@ export function getAllRootHeading(doc: TextDocument, respectMagicCommentOmit: bo
         // Extract heading info.
         const matches = /^(?:\/\/|) {0,3}([#=]{1,6})(.*)$/.exec(crtLineText)!;
         const entry: IHeadingBase = {
-            level: matches[1].length as MarkdownSpec.MarkdownHeadingLevel,
+            level: matches[1].length as HeadingLevel,
             rawContent: matches[2].replace(/^[ \t]+/, '').replace(/[ \t]+#+[ \t]*$/, ''),
             lineIndex: i,
             canInToc: true,
@@ -656,30 +601,12 @@ export function getAllRootHeading(doc: TextDocument, respectMagicCommentOmit: bo
 export function getAllTocEntry(doc: TextDocument, {
     respectMagicCommentOmit = false,
     respectProjectLevelOmit = false,
-    slugifyMode = workspace.getConfiguration('markdown.extension.toc').get<SlugifyMode>('slugifyMode')!,
 }: {
     respectMagicCommentOmit?: boolean;
     respectProjectLevelOmit?: boolean;
-    slugifyMode?: SlugifyMode;
 }): Readonly<IHeading>[] {
     const rootHeadings: readonly Readonly<IHeadingBase>[] = getAllRootHeading(doc, respectMagicCommentOmit, respectProjectLevelOmit);
     const { env } = commonMarkEngine.getDocumentToken(doc);
-
-    const anchorOccurrences = new Map<string, number>();
-    function getSlug(rawContent: string): string {
-        let slug = slugify(rawContent, { env, mode: slugifyMode });
-
-        let count = anchorOccurrences.get(slug);
-        if (count === undefined) {
-            anchorOccurrences.set(slug, 0);
-        } else {
-            count++;
-            anchorOccurrences.set(slug, count);
-            slug += '-' + count.toString();
-        }
-
-        return slug;
-    }
 
     const toc: IHeading[] = rootHeadings.map<IHeading>((heading): IHeading => ({
         level: heading.level,
@@ -688,36 +615,34 @@ export function getAllTocEntry(doc: TextDocument, {
         canInToc: heading.canInToc,
 
         visibleText: createLinkText(heading.rawContent, env),
-        slug: getSlug(heading.rawContent),
     }));
 
     return toc;
 }
 
 //#endregion Public utility
+// class TocCodeLensProvider implements CodeLensProvider {
+//     public provideCodeLenses(document: TextDocument, _: CancellationToken):
+//         CodeLens[] | Thenable<CodeLens[]> {
+//         // VS Code asks for code lens as soon as a text editor is visible (atop the group that holds it), no matter whether it has focus.
+//         // Duplicate editor views refer to the same TextEditor, and the same TextDocument.
+//         const editor = window.visibleTextEditors.find(e => e.document === document)!;
 
-class TocCodeLensProvider implements CodeLensProvider {
-    public provideCodeLenses(document: TextDocument, _: CancellationToken):
-        CodeLens[] | Thenable<CodeLens[]> {
-        // VS Code asks for code lens as soon as a text editor is visible (atop the group that holds it), no matter whether it has focus.
-        // Duplicate editor views refer to the same TextEditor, and the same TextDocument.
-        const editor = window.visibleTextEditors.find(e => e.document === document)!;
+//         loadTocConfig(editor);
 
-        loadTocConfig(editor);
-
-        const lenses: CodeLens[] = [];
-        return detectTocRanges(document).then(tocRangesAndText => {
-            const tocRanges = tocRangesAndText[0];
-            const newToc = tocRangesAndText[1];
-            for (let tocRange of tocRanges) {
-                let status = document.getText(tocRange).replace(/\r?\n|\r/g, docConfig.eol) === newToc ? 'up to date' : 'out of date';
-                lenses.push(new CodeLens(tocRange, {
-                    arguments: [],
-                    title: `Table of Contents (${status})`,
-                    command: ''
-                }));
-            }
-            return lenses;
-        });
-    }
-}
+//         const lenses: CodeLens[] = [];
+//         return detectTocRanges(document).then(tocRangesAndText => {
+//             const tocRanges = tocRangesAndText[0];
+//             const newToc = tocRangesAndText[1];
+//             for (let tocRange of tocRanges) {
+//                 let status = document.getText(tocRange).replace(/\r?\n|\r/g, docConfig.eol) === newToc ? 'up to date' : 'out of date';
+//                 lenses.push(new CodeLens(tocRange, {
+//                     arguments: [],
+//                     title: `Table of Contents (${status})`,
+//                     command: ''
+//                 }));
+//             }
+//             return lenses;
+//         });
+//     }
+// }
