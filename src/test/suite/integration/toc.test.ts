@@ -12,7 +12,7 @@ suite("TOC.", () => {
     });
 
     test("Add section numbers", () => {
-        return testCommand('markdown.extension.toc.addSecNumbers',
+        return testCommand('typst.extension.toc.addSecNumbers',
             [
                 '---',
                 'title: test',
@@ -54,7 +54,7 @@ suite("TOC.", () => {
     });
 
     test("Update section numbers", () => {
-        return testCommand('markdown.extension.toc.addSecNumbers',
+        return testCommand('typst.extension.toc.addSecNumbers',
             [
                 '---',
                 'title: test',
@@ -96,7 +96,7 @@ suite("TOC.", () => {
     });
 
     test("Remove section numbers", () => {
-        return testCommand('markdown.extension.toc.removeSecNumbers',
+        return testCommand('typst.extension.toc.removeSecNumbers',
             [
                 '---',
                 'title: test',
@@ -138,7 +138,7 @@ suite("TOC.", () => {
     });
 
     test("Section numbering starting level", () => {
-        return testCommand('markdown.extension.toc.addSecNumbers',
+        return testCommand('typst.extension.toc.addSecNumbers',
             [
                 '# Heading <!-- omit in toc -->',
                 '## Heading 1',
@@ -156,8 +156,8 @@ suite("TOC.", () => {
     });
 
     test("Section numbering and `toc.levels`", async () => {
-        await updateConfiguration({ config: [["markdown.extension.toc.levels", "2..6"]] });
-        await testCommand('markdown.extension.toc.addSecNumbers',
+        await updateConfiguration({ config: [["typst.extension.toc.levels", "2..6"]] });
+        await testCommand('typst.extension.toc.addSecNumbers',
             [
                 '# Heading',
                 '## Heading 1',

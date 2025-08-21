@@ -20,7 +20,7 @@ const Regexp_Fenced_Code_Block = /^ {0,3}(?<fence>(?<char>[`~])\k<char>{2,})[^`\
 
 export function isMdDocument(doc: vscode.TextDocument | undefined): boolean {
     if (doc) {
-        const extraLangIds = vscode.workspace.getConfiguration("markdown.extension").get<Array<string>>("extraLangIds");
+        const extraLangIds = vscode.workspace.getConfiguration("typst.extension").get<Array<string>>("extraLangIds");
         const langId = doc.languageId;
         if (extraLangIds?.includes(langId)) {
             return true;
@@ -63,10 +63,10 @@ const tocConfig = { startDepth: 1, endDepth: 6, listMarker: '-', orderedList: fa
 
 export function activate(context: ExtensionContext) {
     context.subscriptions.push(
-        // commands.registerCommand('markdown.extension.toc.create', createToc),
-        // commands.registerCommand('markdown.extension.toc.update', updateToc),
-        commands.registerCommand('markdown.extension.toc.addSecNumbers', addSectionNumbers),
-        commands.registerCommand('markdown.extension.toc.removeSecNumbers', removeSectionNumbers),
+        // commands.registerCommand('typst.extension.toc.create', createToc),
+        // commands.registerCommand('typst.extension.toc.update', updateToc),
+        commands.registerCommand('typst.extension.toc.addSecNumbers', addSectionNumbers),
+        commands.registerCommand('typst.extension.toc.removeSecNumbers', removeSectionNumbers),
         // workspace.onWillSaveTextDocument(onWillSave),
         // languages.registerCodeLensProvider(Document_Selector_Markdown, new TocCodeLensProvider())
     );
@@ -146,7 +146,7 @@ function removeSectionNumbers() {
  * @param doc The document.
  */
 function getProjectExcludedHeadings(doc: TextDocument): readonly Readonly<{ level: number, text: string; }>[] {
-    const configObj = workspace.getConfiguration('markdown.extension.toc').get<{ [path: string]: string[]; }>('omittedFromToc');
+    const configObj = workspace.getConfiguration('typst.extension.toc').get<{ [path: string]: string[]; }>('omittedFromToc');
 
     if (typeof configObj !== 'object' || configObj === null) {
         window.showErrorMessage(`\`omittedFromToc\` must be an object (e.g. \`{"README.md": ["# Introduction"]}\`)`);
@@ -202,7 +202,7 @@ function getProjectExcludedHeadings(doc: TextDocument): readonly Readonly<{ leve
  * @param editor The editor, from which we detect `docConfig`.
  */
 function loadTocConfig(editor: TextEditor): void {
-    const tocSectionCfg = workspace.getConfiguration('markdown.extension.toc');
+    const tocSectionCfg = workspace.getConfiguration('typst.extension.toc');
     const tocLevels = tocSectionCfg.get<string>('levels')!;
     let matches;
     if (matches = tocLevels.match(/^([1-6])\.\.([1-6])$/)) {
@@ -219,7 +219,7 @@ function loadTocConfig(editor: TextEditor): void {
 
     let tabSize = Number(editor.options.tabSize);
     // Seems not robust.
-    if (workspace.getConfiguration('markdown.extension.list', editor.document.uri).get<string>('indentationSize') === 'adaptive') {
+    if (workspace.getConfiguration('typst.extension.list', editor.document.uri).get<string>('indentationSize') === 'adaptive') {
         tabSize = tocConfig.orderedList ? 3 : 2;
     }
 

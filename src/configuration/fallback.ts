@@ -12,7 +12,7 @@ export const Deprecated_Keys = Object.freeze<string>([
 
 export const Fallback_Map = Object.freeze<IConfigurationFallbackMap<IConfigurationKeyTypeMap>>({
     "theming.decoration.renderCodeSpan": (scope): boolean => {
-        const config = vscode.workspace.getConfiguration("markdown.extension", scope);
+        const config = vscode.workspace.getConfiguration("typst.extension", scope);
         const old = config.get<boolean | null>("syntax.decorations");
         if (old === null || old === undefined) {
             return config.get<boolean>("theming.decoration.renderCodeSpan")!;
@@ -22,7 +22,7 @@ export const Fallback_Map = Object.freeze<IConfigurationFallbackMap<IConfigurati
     },
 
     "theming.decoration.renderStrikethrough": (scope): boolean => {
-        const config = vscode.workspace.getConfiguration("markdown.extension", scope);
+        const config = vscode.workspace.getConfiguration("typst.extension", scope);
         const old = config.get<boolean | null>("syntax.decorations");
         if (old === null || old === undefined) {
             return config.get<boolean>("theming.decoration.renderStrikethrough")!;

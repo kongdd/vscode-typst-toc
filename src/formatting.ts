@@ -5,18 +5,18 @@ import { commands, env, ExtensionContext, Position, Range, Selection, SnippetStr
 
 export function activate(context: ExtensionContext) {
     context.subscriptions.push(
-        commands.registerCommand('markdown.extension.editing.toggleBold', () => toggleEmphasis(EmphasisType.BOLD)),
-        commands.registerCommand('markdown.extension.editing.toggleItalic', () => toggleEmphasis(EmphasisType.ITALIC)),
-        commands.registerCommand('markdown.extension.editing.toggleCodeSpan', toggleCodeSpan),
-        commands.registerCommand('markdown.extension.editing.toggleStrikethrough', toggleStrikethrough),
-        commands.registerCommand('markdown.extension.editing.toggleMath', () => toggleMath(transTable)),
-        commands.registerCommand('markdown.extension.editing.toggleMathReverse', () => toggleMath(reverseTransTable)),
-        commands.registerCommand('markdown.extension.editing.toggleHeadingUp', toggleHeadingUp),
-        commands.registerCommand('markdown.extension.editing.toggleHeadingDown', toggleHeadingDown),
-        commands.registerCommand('markdown.extension.editing.toggleList', toggleList),
-        commands.registerCommand('markdown.extension.editing.toggleCodeBlock', toggleCodeBlock),
-        commands.registerCommand('markdown.extension.editing.paste', paste),
-        commands.registerCommand('markdown.extension.editing._wrapBy', args => styleByWrapping(args['before'], args['after']))
+        commands.registerCommand('typst.extension.editing.toggleBold', () => toggleEmphasis(EmphasisType.BOLD)),
+        commands.registerCommand('typst.extension.editing.toggleItalic', () => toggleEmphasis(EmphasisType.ITALIC)),
+        commands.registerCommand('typst.extension.editing.toggleCodeSpan', toggleCodeSpan),
+        commands.registerCommand('typst.extension.editing.toggleStrikethrough', toggleStrikethrough),
+        commands.registerCommand('typst.extension.editing.toggleMath', () => toggleMath(transTable)),
+        commands.registerCommand('typst.extension.editing.toggleMathReverse', () => toggleMath(reverseTransTable)),
+        commands.registerCommand('typst.extension.editing.toggleHeadingUp', toggleHeadingUp),
+        commands.registerCommand('typst.extension.editing.toggleHeadingDown', toggleHeadingDown),
+        commands.registerCommand('typst.extension.editing.toggleList', toggleList),
+        commands.registerCommand('typst.extension.editing.toggleCodeBlock', toggleCodeBlock),
+        commands.registerCommand('typst.extension.editing.paste', paste),
+        commands.registerCommand('typst.extension.editing._wrapBy', args => styleByWrapping(args['before'], args['after']))
     );
 }
 
@@ -33,7 +33,7 @@ enum EmphasisType {
 }
 
 function toggleEmphasis(type: EmphasisType) {
-    let indicator = workspace.getConfiguration('markdown.extension.' + EmphasisType[type].toLowerCase()).get<string>('indicator')!;
+    let indicator = workspace.getConfiguration('typst.extension.' + EmphasisType[type].toLowerCase()).get<string>('indicator')!;
     return styleByWrapping(indicator);
 }
 
@@ -322,7 +322,7 @@ function getNextListStart(current: ListMarker): ListMarker {
  */
 function getCandidateMarkers(): ListMarker[] {
     // read configArray from configuration and append space
-    let configArray = workspace.getConfiguration('markdown.extension.list.toggle').get<string[]>('candidate-markers');
+    let configArray = workspace.getConfiguration('typst.extension.list.toggle').get<string[]>('candidate-markers');
     if (!(configArray instanceof Array))
         return listMarkerDefaultMarkerArray;
     
