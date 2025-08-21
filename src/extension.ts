@@ -25,6 +25,7 @@ export function activate(context: ExtensionContext) {
     // });
     // return { extendMarkdownIt };
     toc.activate(context);
+    fmt.activate(context);
 
     // Typst word pattern - supports Typst syntax for text formatting
     // *bold* and **bolder** text patterns

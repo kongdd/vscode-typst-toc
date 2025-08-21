@@ -2,7 +2,7 @@ import type { MarkdownBulletListMarker, MarkdownEmphasisIndicator, MarkdownStron
 
 /**
  * A map from our configuration keys to the corresponding type definitions.
- * These keys are relative to `typst.extension`.
+ * These keys are relative to `markdown.extension`.
  * Should keep in sync with `package.json`.
  */
 export interface IConfigurationKeyTypeMap {
@@ -64,6 +64,6 @@ export interface IConfigurationKeyTypeMap {
 
 /**
  * Configuration keys that this product contributes.
- * These keys are relative to `typst.extension`.
+ * These keys are relative to `markdown.extension`.
  */
 export type IConfigurationKnownKey = keyof IConfigurationKeyTypeMap;

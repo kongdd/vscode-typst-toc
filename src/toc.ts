@@ -20,7 +20,7 @@ const Regexp_Fenced_Code_Block = /^ {0,3}(?<fence>(?<char>[`~])\k<char>{2,})[^`\
 
 export function isMdDocument(doc: vscode.TextDocument | undefined): boolean {
     if (doc) {
-        const extraLangIds = vscode.workspace.getConfiguration("typst.extension").get<Array<string>>("extraLangIds");
+        const extraLangIds = vscode.workspace.getConfiguration("markdown.extension").get<Array<string>>("extraLangIds");
         const langId = doc.languageId;
         if (extraLangIds?.includes(langId)) {
             return true;
@@ -219,7 +219,7 @@ function loadTocConfig(editor: TextEditor): void {
 
     let tabSize = Number(editor.options.tabSize);
     // Seems not robust.
-    if (workspace.getConfiguration('typst.extension.list', editor.document.uri).get<string>('indentationSize') === 'adaptive') {
+    if (workspace.getConfiguration('markdown.extension.list', editor.document.uri).get<string>('indentationSize') === 'adaptive') {
         tabSize = tocConfig.orderedList ? 3 : 2;
     }
 

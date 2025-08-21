@@ -1,5 +1,5 @@
 {
-    "name": "typst-toc",
+    "name": "typst-format-all-in-one",
     "displayName": "%ext.displayName%",
     "description": "%ext.description%",
     "icon": "images/Markdown-mark.png",
@@ -34,56 +34,8 @@
     "main": "./dist/node/main.js",
     "contributes": {
         "colors": [
-            {
-                "id": "typst.extension.editor.codeSpan.background",
-                "description": "Background color of code spans in the Markdown editor.",
-                "defaults": {
-                    "dark": "#00000000",
-                    "light": "#00000000",
-                    "highContrast": "#00000000"
-                }
-            },
-            {
-                "id": "typst.extension.editor.codeSpan.border",
-                "description": "Border color of code spans in the Markdown editor.",
-                "defaults": {
-                    "dark": "editor.selectionBackground",
-                    "light": "editor.selectionBackground",
-                    "highContrast": "editor.selectionBackground"
-                }
-            },
-            {
-                "id": "typst.extension.editor.formattingMark.foreground",
-                "description": "Color of formatting marks (paragraphs, hard line breaks, links, etc.) in the Markdown editor.",
-                "defaults": {
-                    "dark": "editorWhitespace.foreground",
-                    "light": "editorWhitespace.foreground",
-                    "highContrast": "diffEditor.insertedTextBorder"
-                }
-            },
-            {
-                "id": "typst.extension.editor.trailingSpace.background",
-                "description": "Background color of trailing space (U+0020) characters in the Markdown editor.",
-                "defaults": {
-                    "dark": "diffEditor.diagonalFill",
-                    "light": "diffEditor.diagonalFill",
-                    "highContrast": "editorWhitespace.foreground"
-                }
-            }
         ],
         "commands": [
-            {
-                "command": "typst.extension.toc.create",
-                "enablement": "editorLangId =~ /^markdown$|^rmd$|^quarto$|^typst$/",
-                "title": "%command.toc.create.title%",
-                "category": "typst-toc"
-            },
-            {
-                "command": "typst.extension.toc.update",
-                "enablement": "editorLangId =~ /^markdown$|^rmd$|^quarto|^typst$/",
-                "title": "%command.toc.update.title%",
-                "category": "typst-toc"
-            },
             {
                 "command": "typst.extension.toc.addSecNumbers",
                 "enablement": "editorLangId =~ /^markdown$|^rmd$|^quarto$|^typst$/",
@@ -94,50 +46,6 @@
                 "command": "typst.extension.toc.removeSecNumbers",
                 "enablement": "editorLangId =~ /^markdown$|^rmd$|^quarto$|^typst$/",
                 "title": "%command.toc.removeSecNumbers.title%",
-                "category": "typst-toc"
-            },
-            {
-                "command": "typst.extension.printToHtml",
-                "enablement": "editorLangId =~ /^markdown$|^rmd$|^quarto$/",
-                "title": "%command.printToHtml.title%",
-                "category": "typst-toc"
-            },
-            {
-                "command": "typst.extension.printToHtmlBatch",
-                "enablement": "workspaceFolderCount >= 1",
-                "title": "%command.printToHtmlBatch.title%",
-                "category": "typst-toc"
-            },
-            {
-                "command": "typst.extension.editing.toggleCodeSpan",
-                "enablement": "editorLangId =~ /^markdown$|^rmd$|^quarto$/",
-                "title": "%command.editing.toggleCodeSpan.title%",
-                "icon": "$(code)",
-                "category": "typst-toc"
-            },
-            {
-                "command": "typst.extension.editing.toggleMath",
-                "enablement": "editorLangId =~ /^markdown$|^rmd$|^quarto$/",
-                "title": "%command.editing.toggleMath.title%",
-                "category": "typst-toc"
-            },
-            {
-                "command": "typst.extension.editing.toggleMathReverse",
-                "enablement": "editorLangId =~ /^markdown$|^rmd$|^quarto$/",
-                "title": "%command.editing.toggleMathReverse.title%",
-                "category": "typst-toc"
-            },
-            {
-                "command": "typst.extension.editing.toggleList",
-                "enablement": "editorLangId =~ /^markdown$|^rmd$|^quarto$/",
-                "title": "%command.editing.toggleList.title%",
-                "icon": "$(list-unordered)",
-                "category": "typst-toc"
-            },
-            {
-                "command": "typst.extension.editing.toggleCodeBlock",
-                "enablement": "editorLangId =~ /^markdown$|^rmd$|^quarto$/",
-                "title": "%command.editing.toggleCodeBlock.title%",
                 "category": "typst-toc"
             },
             {
@@ -159,55 +67,9 @@
                 "enablement": "editorLangId =~ /^markdown$|^rmd$|^quarto$/",
                 "title": "%command.editing.toggleStrikethrough%",
                 "category": "typst-toc"
-            },
-            {
-                "command": "typst.extension.checkTaskList",
-                "enablement": "editorLangId =~ /^markdown$|^rmd$|^quarto$/",
-                "title": "%command.checkTaskList%",
-                "icon": "$(tasklist)",
-                "category": "typst-toc"
             }
         ],
         "menus": {
-            "editor/context": [
-                {
-                    "command": "typst.extension.printToHtml",
-                    "when": "editorLangId =~ /^markdown$|^rmd$|^quarto$/",
-                    "group": "markdown.print@1"
-                },
-                {
-                    "command": "typst.extension.printToHtmlBatch",
-                    "when": "editorLangId =~ /^markdown$|^rmd$|^quarto$/ && workspaceFolderCount >= 1",
-                    "group": "markdown.print@2"
-                }
-            ],
-            "editor/title": [
-                {
-                    "when": "editorLangId =~ /^markdown$|^rmd$|^quarto$/ && config.typst.extension.showActionButtons",
-                    "command": "typst.extension.editing.toggleBold",
-                    "group": "navigation@1"
-                },
-                {
-                    "when": "editorLangId =~ /^markdown$|^rmd$|^quarto$/ && config.typst.extension.showActionButtons",
-                    "command": "typst.extension.editing.toggleItalic",
-                    "group": "navigation@2"
-                },
-                {
-                    "when": "editorLangId =~ /^markdown$|^rmd$|^quarto$/ && config.typst.extension.showActionButtons",
-                    "command": "typst.extension.editing.toggleCodeSpan",
-                    "group": "navigation@3"
-                },
-                {
-                    "when": "editorLangId =~ /^markdown$|^rmd$|^quarto$/ && config.typst.extension.showActionButtons",
-                    "command": "typst.extension.editing.toggleList",
-                    "group": "navigation@4"
-                },
-                {
-                    "when": "editorLangId =~ /^markdown$|^rmd$|^quarto$/ && config.typst.extension.showActionButtons",
-                    "command": "typst.extension.checkTaskList",
-                    "group": "navigation@5"
-                }
-            ]
         },
         "keybindings": [
             {
@@ -246,90 +108,6 @@
                 "when": "editorTextFocus && !editorReadonly && editorLangId =~ /^markdown$|^rmd$|^quarto$/"
             },
             {
-                "command": "typst.extension.onEnterKey",
-                "key": "enter",
-                "when": "editorTextFocus && !editorReadonly && editorLangId =~ /^markdown$|^rmd$|^quarto$/ && (!suggestWidgetVisible || config.editor.acceptSuggestionOnEnter == 'off') && !editorHasMultipleSelections && vim.mode != 'Normal' && vim.mode != 'Visual' && vim.mode != 'VisualBlock' && vim.mode != 'VisualLine' && vim.mode != 'SearchInProgressMode' && vim.mode != 'CommandlineInProgress' && vim.mode != 'Replace' && vim.mode != 'EasyMotionMode' && vim.mode != 'EasyMotionInputMode' && vim.mode != 'SurroundInputMode' && !typst.extension.editor.cursor.inFencedCodeBlock && !typst.extension.editor.cursor.inMathEnv"
-            },
-            {
-                "command": "typst.extension.onCtrlEnterKey",
-                "key": "ctrl+enter",
-                "mac": "cmd+enter",
-                "when": "editorTextFocus && !editorReadonly && editorLangId =~ /^markdown$|^rmd$|^quarto$/ && (!suggestWidgetVisible || config.editor.acceptSuggestionOnEnter == 'off') && !editorHasMultipleSelections && !typst.extension.editor.cursor.inFencedCodeBlock && !typst.extension.editor.cursor.inMathEnv"
-            },
-            {
-                "command": "typst.extension.onShiftEnterKey",
-                "key": "shift+enter",
-                "when": "editorTextFocus && !editorReadonly && editorLangId =~ /^markdown$|^rmd$|^quarto$/ && (!suggestWidgetVisible || config.editor.acceptSuggestionOnEnter == 'off') && !editorHasMultipleSelections && !typst.extension.editor.cursor.inFencedCodeBlock && !typst.extension.editor.cursor.inMathEnv"
-            },
-            {
-                "command": "typst.extension.onTabKey",
-                "key": "tab",
-                "when": "editorTextFocus && !editorReadonly && editorLangId =~ /^markdown$|^rmd$|^quarto$/ && !suggestWidgetVisible && !inlineSuggestionVisible && !editorHasMultipleSelections && !editorTabMovesFocus && !inSnippetMode && !hasSnippetCompletions && !hasOtherSuggestions && typst.extension.editor.cursor.inList && !typst.extension.editor.cursor.inFencedCodeBlock && !typst.extension.editor.cursor.inMathEnv"
-            },
-            {
-                "command": "typst.extension.onShiftTabKey",
-                "key": "shift+tab",
-                "when": "editorTextFocus && !editorReadonly && editorLangId =~ /^markdown$|^rmd$|^quarto$/ && !suggestWidgetVisible && !editorHasMultipleSelections && !editorTabMovesFocus && !inSnippetMode && !hasSnippetCompletions && !hasOtherSuggestions && typst.extension.editor.cursor.inList && !typst.extension.editor.cursor.inFencedCodeBlock && !typst.extension.editor.cursor.inMathEnv"
-            },
-            {
-                "command": "typst.extension.onBackspaceKey",
-                "key": "backspace",
-                "when": "editorTextFocus && !editorReadonly && editorLangId =~ /^markdown$|^rmd$|^quarto$/ && !suggestWidgetVisible && !editorHasMultipleSelections && vim.mode != 'Normal' && vim.mode != 'Visual' && vim.mode != 'VisualBlock' && vim.mode != 'VisualLine' && vim.mode != 'SearchInProgressMode' && vim.mode != 'CommandlineInProgress' && vim.mode != 'Replace' && vim.mode != 'EasyMotionMode' && vim.mode != 'EasyMotionInputMode' && vim.mode != 'SurroundInputMode' && !typst.extension.editor.cursor.inFencedCodeBlock && !typst.extension.editor.cursor.inMathEnv"
-            },
-            {
-                "command": "typst.extension.onMoveLineUp",
-                "key": "alt+up",
-                "when": "editorTextFocus && !editorReadonly && editorLangId =~ /^markdown$|^rmd$|^quarto$/ && !suggestWidgetVisible"
-            },
-            {
-                "command": "typst.extension.onMoveLineDown",
-                "key": "alt+down",
-                "when": "editorTextFocus && !editorReadonly && editorLangId =~ /^markdown$|^rmd$|^quarto$/ && !suggestWidgetVisible"
-            },
-            {
-                "command": "typst.extension.onCopyLineUp",
-                "win": "shift+alt+up",
-                "mac": "shift+alt+up",
-                "linux": "ctrl+shift+alt+up",
-                "when": "editorTextFocus && !editorReadonly && editorLangId =~ /^markdown$|^rmd$|^quarto$/ && !suggestWidgetVisible"
-            },
-            {
-                "command": "typst.extension.onCopyLineDown",
-                "win": "shift+alt+down",
-                "mac": "shift+alt+down",
-                "linux": "ctrl+shift+alt+down",
-                "when": "editorTextFocus && !editorReadonly && editorLangId =~ /^markdown$|^rmd$|^quarto$/ && !suggestWidgetVisible"
-            },
-            {
-                "command": "typst.extension.onIndentLines",
-                "key": "ctrl+]",
-                "mac": "cmd+]",
-                "when": "editorTextFocus && editorLangId =~ /^markdown$|^rmd$|^quarto$/ && !suggestWidgetVisible"
-            },
-            {
-                "command": "typst.extension.onOutdentLines",
-                "key": "ctrl+[",
-                "mac": "cmd+[",
-                "when": "editorTextFocus && editorLangId =~ /^markdown$|^rmd$|^quarto$/ && !suggestWidgetVisible"
-            },
-            {
-                "command": "typst.extension.checkTaskList",
-                "key": "alt+c",
-                "when": "editorTextFocus && editorLangId =~ /^markdown$|^rmd$|^quarto$/ && !isMac"
-            },
-            {
-                "command": "typst.extension.closePreview",
-                "key": "ctrl+shift+v",
-                "mac": "cmd+shift+v",
-                "when": "activeWebviewPanelId == 'markdown.preview'"
-            },
-            {
-                "command": "typst.extension.closePreview",
-                "key": "ctrl+k v",
-                "mac": "cmd+k v",
-                "when": "activeWebviewPanelId == 'markdown.preview'"
-            },
-            {
                 "command": "typst.extension.editing.paste",
                 "key": "ctrl+v",
                 "mac": "cmd+v",
@@ -340,34 +118,7 @@
             "type": "object",
             "title": "%config.title%",
             "properties": {
-                "typst.extension.completion.enabled": {
-                    "type": "boolean",
-                    "default": false,
-                    "description": "%config.completion.enabled%",
-                    "scope": "resource"
-                },
-                "typst.extension.completion.respectVscodeSearchExclude": {
-                    "type": "boolean",
-                    "default": true,
-                    "markdownDescription": "%config.completion.respectVscodeSearchExclude%",
-                    "scope": "resource"
-                },
-                "typst.extension.completion.root": {
-                    "type": "string",
-                    "default": "",
-                    "description": "%config.completion.root%",
-                    "scope": "resource"
-                },
-                "typst.extension.italic.indicator": {
-                    "type": "string",
-                    "default": "*",
-                    "markdownDescription": "%config.italic.indicator.description%",
-                    "enum": [
-                        "*",
-                        "_"
-                    ]
-                },
-                "typst.extension.bold.indicator": {
+                "markdown.extension.bold.indicator": {
                     "type": "string",
                     "default": "**",
                     "markdownDescription": "%config.bold.indicator.description%",
@@ -376,191 +127,17 @@
                         "__"
                     ]
                 },
-                "typst.extension.katex.macros": {
+                "markdown.extension.katex.macros": {
                     "type": "object",
                     "default": {},
                     "description": "%config.katex.macros.description%"
                 },
-                "typst.extension.list.indentationSize": {
-                    "type": "string",
-                    "enum": [
-                        "adaptive",
-                        "inherit"
-                    ],
-                    "markdownEnumDescriptions": [
-                        "%config.list.indentationSize.enumDescriptions.adaptive%",
-                        "%config.list.indentationSize.enumDescriptions.inherit%"
-                    ],
-                    "default": "adaptive",
-                    "markdownDescription": "%config.list.indentationSize.description%",
-                    "scope": "resource"
-                },
-                "typst.extension.list.toggle.candidate-markers": {
-                    "type": "array",
-                    "default": [
-                        "-",
-                        "*",
-                        "+",
-                        "1.",
-                        "1)"
-                    ],
-                    "items": {
-                        "enum": [
-                            "-",
-                            "*",
-                            "+",
-                            "1.",
-                            "1)"
-                        ]
-                    },
-                    "minItems": 1,
-                    "maxItems": 5,
-                    "uniqueItems": true,
-                    "description": "%config.list.toggle.candidate-markers.description%"
-                },
-                "typst.extension.math.enabled": {
+                "markdown.extension.math.enabled": {
                     "type": "boolean",
                     "default": true,
                     "description": "%config.math.enabled%"
                 },
-                "typst.extension.orderedList.autoRenumber": {
-                    "type": "boolean",
-                    "default": true,
-                    "description": "%config.orderedList.autoRenumber.description%"
-                },
-                "typst.extension.orderedList.marker": {
-                    "type": "string",
-                    "default": "ordered",
-                    "description": "%config.orderedList.marker.description%",
-                    "enum": [
-                        "one",
-                        "ordered"
-                    ],
-                    "markdownEnumDescriptions": [
-                        "%config.orderedList.marker.enumDescriptions.one%",
-                        "%config.orderedList.marker.enumDescriptions.ordered%"
-                    ]
-                },
-                "typst.extension.preview.autoShowPreviewToSide": {
-                    "type": "boolean",
-                    "default": false,
-                    "description": "%config.preview.autoShowPreviewToSide.description%"
-                },
-                "typst.extension.print.absoluteImgPath": {
-                    "type": "boolean",
-                    "default": true,
-                    "description": "%config.print.absoluteImgPath.description%",
-                    "scope": "resource"
-                },
-                "typst.extension.print.imgToBase64": {
-                    "type": "boolean",
-                    "default": false,
-                    "description": "%config.print.imgToBase64.description%",
-                    "scope": "resource"
-                },
-                "typst.extension.print.includeVscodeStylesheets": {
-                    "type": "boolean",
-                    "default": true,
-                    "description": "%config.print.includeVscodeStylesheets%"
-                },
-                "typst.extension.print.onFileSave": {
-                    "type": "boolean",
-                    "default": false,
-                    "description": "%config.print.onFileSave.description%",
-                    "scope": "resource"
-                },
-                "typst.extension.print.pureHtml": {
-                    "type": "boolean",
-                    "default": false,
-                    "description": "%config.print.pureHtml.description%",
-                    "scope": "resource"
-                },
-                "typst.extension.print.theme": {
-                    "type": "string",
-                    "default": "light",
-                    "enum": [
-                        "light",
-                        "dark"
-                    ],
-                    "description": "%config.print.theme%",
-                    "scope": "resource"
-                },
-                "typst.extension.print.validateUrls": {
-                    "type": "boolean",
-                    "default": true,
-                    "description": "%config.print.validateUrls.description%"
-                },
-                "typst.extension.showActionButtons": {
-                    "type": "boolean",
-                    "default": false,
-                    "description": "%config.showActionButtons.description%"
-                },
-                "typst.extension.syntax.decorations": {
-                    "type": "boolean",
-                    "default": null,
-                    "markdownDeprecationMessage": "%config.syntax.decorations.description%"
-                },
-                "typst.extension.syntax.decorationFileSizeLimit": {
-                    "type": "number",
-                    "default": 50000,
-                    "description": "%config.syntax.decorationFileSizeLimit.description%"
-                },
-                "typst.extension.syntax.plainTheme": {
-                    "type": "boolean",
-                    "default": false,
-                    "markdownDescription": "%config.syntax.plainTheme.description%"
-                },
-                "typst.extension.tableFormatter.enabled": {
-                    "type": "boolean",
-                    "default": true,
-                    "markdownDescription": "%config.tableFormatter.enabled.description%"
-                },
-                "typst.extension.tableFormatter.normalizeIndentation": {
-                    "type": "boolean",
-                    "default": false,
-                    "markdownDescription": "%config.tableFormatter.normalizeIndentation.description%"
-                },
-                "typst.extension.tableFormatter.delimiterRowNoPadding": {
-                    "type": "boolean",
-                    "default": false,
-                    "markdownDescription": "%config.tableFormatter.delimiterRowNoPadding.description%"
-                },
-                "typst.extension.theming.decoration.renderCodeSpan": {
-                    "type": "boolean",
-                    "default": true,
-                    "markdownDescription": "%config.theming.decoration.renderCodeSpan.description%",
-                    "scope": "application"
-                },
-                "typst.extension.theming.decoration.renderHardLineBreak": {
-                    "type": "boolean",
-                    "default": false,
-                    "markdownDescription": "%config.theming.decoration.renderHardLineBreak.description%",
-                    "scope": "application"
-                },
-                "typst.extension.theming.decoration.renderLink": {
-                    "type": "boolean",
-                    "default": false,
-                    "markdownDescription": "%config.theming.decoration.renderLink.description%",
-                    "scope": "application"
-                },
-                "typst.extension.theming.decoration.renderParagraph": {
-                    "type": "boolean",
-                    "default": false,
-                    "markdownDescription": "%config.theming.decoration.renderParagraph.description%",
-                    "scope": "application"
-                },
-                "typst.extension.theming.decoration.renderStrikethrough": {
-                    "type": "boolean",
-                    "default": true,
-                    "markdownDescription": "%config.theming.decoration.renderStrikethrough.description%",
-                    "scope": "application"
-                },
-                "typst.extension.theming.decoration.renderTrailingSpace": {
-                    "type": "boolean",
-                    "default": false,
-                    "markdownDescription": "%config.theming.decoration.renderTrailingSpace.description%",
-                    "scope": "application"
-                },
+                
                 "typst.extension.toc.levels": {
                     "type": "string",
                     "default": "1..6",
@@ -620,7 +197,7 @@
                     "default": true,
                     "description": "%config.toc.updateOnSave.description%"
                 },
-                "typst.extension.extraLangIds": {
+                "markdown.extension.extraLangIds": {
                     "type": "array",
                     "default": [],
                     "items": {
