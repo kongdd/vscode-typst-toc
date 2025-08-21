@@ -33,8 +33,7 @@
     ],
     "main": "./dist/node/main.js",
     "contributes": {
-        "colors": [
-        ],
+        "colors": [],
         "commands": [
             {
                 "command": "typst.extension.toc.addSecNumbers",
@@ -50,7 +49,7 @@
             },
             {
                 "command": "typst.extension.editing.toggleBold",
-                "enablement": "editorLangId =~ /^markdown$|^rmd$|^quarto$/",
+                "enablement": "editorLangId =~ /rmd|quarto|markdown|typst/",
                 "title": "%command.editing.toggleBold%",
                 "icon": "$(bold)",
                 "category": "typst-toc"
@@ -69,8 +68,7 @@
                 "category": "typst-toc"
             }
         ],
-        "menus": {
-        },
+        "menus": {},
         "keybindings": [
             {
                 "key": "ctrl+shift+u",
@@ -78,9 +76,14 @@
                 "when": "editorLangId =~ /rmd|quarto|markdown|typst/"
             },
             {
+                "command": "typst.extension.editing.toggleStrikethrough",
+                "key": "alt+s",
+                "when": "editorTextFocus && !editorReadonly && editorLangId =~ /^(rmd|quarto|markdown)$/"
+            },
+            {
                 "key": "ctrl+i",
                 "command": "typst.extension.editing._wrapBy",
-                "when": "editorLangId =~ /rmd|quarto|markdown|typst/",
+                "when": "editorLangId =~ /^(rmd|quarto|markdown)$/",
                 "args": {
                     "before": "*",
                     "after": "*"
@@ -89,22 +92,74 @@
             {
                 "key": "ctrl+u",
                 "command": "typst.extension.editing._wrapBy",
-                "when": "editorLangId == 'rmd' || editorLangId == 'qmd' || editorLangId == 'markdown'",
+                "when": "editorLangId =~ /^(rmd|quarto|markdown)$/",
                 "args": {
                     "before": "<u>",
                     "after": "</u>"
                 }
             },
             {
-                "command": "typst.extension.editing.toggleBold",
-                "key": "ctrl+b",
-                "mac": "cmd+b",
-                "when": "editorTextFocus && !editorReadonly && editorLangId =~ /^markdown$|^rmd$|^quarto$/"
+                "key": "ctrl+e",
+                "command": "typst.extension.editing._wrapBy",
+                "when": "editorLangId =~ /^(rmd|quarto|markdown)$/",
+                "args": {
+                    "before": "<center>",
+                    "after": "</center>"
+                }
             },
             {
-                "command": "typst.extension.editing.toggleStrikethrough",
-                "key": "alt+s",
-                "when": "editorTextFocus && !editorReadonly && editorLangId =~ /^markdown$|^rmd$|^quarto$/ && !isMac"
+                "key": "alt+r",
+                "command": "typst.extension.editing._wrapBy",
+                "when": "editorLangId =~ /^(rmd|quarto|markdown)$/",
+                "args": {
+                    "before": "<span style='color:red'>",
+                    "after": "</span>"
+                }
+            },
+            {
+                "key": "alt+y",
+                "command": "typst.extension.editing._wrapBy",
+                "when": "editorLangId =~ /^(rmd|quarto|markdown)$/",
+                "args": {
+                    "before": "<span style='background-color:yellow'>",
+                    "after": "</span>"
+                }
+            },
+            {
+                "key": "ctrl+i",
+                "command": "typst.extension.editing._wrapBy",
+                "when": "editorLangId == 'typst'",
+                "args": {
+                    "before": "_",
+                    "after": "_"
+                }
+            },
+            {
+                "key": "ctrl+u",
+                "command": "typst.extension.editing._wrapBy",
+                "when": "editorLangId == 'typst'",
+                "args": {
+                    "before": "#underline[",
+                    "after": "]"
+                }
+            },
+            {
+                "key": "alt+y",
+                "command": "typst.extension.editing._wrapBy",
+                "when": "editorLangId == 'typst'",
+                "args": {
+                    "before": "#highlight[",
+                    "after": "]"
+                }
+            },
+            {
+                "key": "alt+b",
+                "command": "typst.extension.editing._wrapBy",
+                "when": "editorLangId == 'typst'",
+                "args": {
+                    "before": "#Blue[",
+                    "after": "]"
+                }
             }
         ],
         "configuration": {
@@ -130,7 +185,6 @@
                     "default": true,
                     "description": "%config.math.enabled%"
                 },
-                
                 "typst.extension.toc.levels": {
                     "type": "string",
                     "default": "1..6",
@@ -195,8 +249,9 @@
                     "default": [],
                     "items": {
                         "enum": [
+                            "markdown",
                             "rmd",
-                            "quarto", 
+                            "quarto",
                             "typst"
                         ]
                     },
@@ -232,14 +287,14 @@
         }
     },
     "scripts": {
+        "prebuild": "node ./keybindings/sync-keybindings.js",
         "vscode:prepublish": "npm run build",
         "build": "node ./build/build.js",
         "dev-compile": "tsc --build --watch --verbose",
         "pretest": "tsc --build",
         "test": "node ./out/test/runTest.js"
     },
-    "dependencies": {
-    },
+    "dependencies": {},
     "devDependencies": {
         "@types/katex": "^0.14.0",
         "@types/mocha": "^10.0.0",

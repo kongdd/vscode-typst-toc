@@ -1,0 +1,93 @@
+[
+    {
+        "key": "ctrl+shift+u",
+        "command": "typst.extension.toc.addSecNumbers",
+        "when": "editorLangId =~ /rmd|quarto|markdown|typst/"
+    },
+    {
+        "command": "typst.extension.editing.toggleStrikethrough",
+        "key": "alt+s",
+        "when": "editorTextFocus && !editorReadonly && editorLangId =~ /^(rmd|quarto|markdown)$/"
+    },
+    {
+        "key": "ctrl+i",
+        "command": "typst.extension.editing._wrapBy",
+        "when": "editorLangId =~ /^(rmd|quarto|markdown)$/",
+        "args": {
+            "before": "*",
+            "after": "*"
+        }
+    },
+    {
+        "key": "ctrl+u",
+        "command": "typst.extension.editing._wrapBy",
+        "when": "editorLangId =~ /^(rmd|quarto|markdown)$/",
+        "args": {
+            "before": "<u>",
+            "after": "</u>"
+        }
+    },
+    {
+        "key": "ctrl+e",
+        "command": "typst.extension.editing._wrapBy",
+        "when": "editorLangId =~ /^(rmd|quarto|markdown)$/",
+        "args": {
+            "before": "<center>",
+            "after": "</center>"
+        }
+    },
+    {
+        "key": "alt+r",
+        "command": "typst.extension.editing._wrapBy",
+        "when": "editorLangId =~ /^(rmd|quarto|markdown)$/",
+        "args": {
+            "before": "<span style='color:red'>",
+            "after": "</span>"
+        }
+    },
+    {
+        "key": "alt+y",
+        "command": "typst.extension.editing._wrapBy",
+        "when": "editorLangId =~ /^(rmd|quarto|markdown)$/",
+        "args": {
+            "before": "<span style='background-color:yellow'>",
+            "after": "</span>"
+        }
+    },
+    {
+        "key": "ctrl+i",
+        "command": "typst.extension.editing._wrapBy",
+        "when": "editorLangId == 'typst'",
+        "args": {
+            "before": "_",
+            "after": "_"
+        }
+    },
+    {
+        "key": "ctrl+u",
+        "command": "typst.extension.editing._wrapBy",
+        "when": "editorLangId == 'typst'",
+        "args": {
+            "before": "#underline[",
+            "after": "]"
+        }
+    },
+    {
+        "key": "alt+y",
+        "command": "typst.extension.editing._wrapBy",
+        "when": "editorLangId == 'typst'",
+        "args": {
+            "before": "#highlight[",
+            "after": "]"
+        }
+    },
+    {
+        "key": "alt+b",
+        "command": "typst.extension.editing._wrapBy",
+        "when": "editorLangId == 'typst'",
+        "args": {
+            "before": "#Blue[",
+            "after": "]"
+        }
+    }
+]
