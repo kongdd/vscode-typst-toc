@@ -33,8 +33,7 @@
     ],
     "main": "./dist/node/main.js",
     "contributes": {
-        "colors": [
-        ],
+        "colors": [],
         "commands": [
             {
                 "command": "typst.extension.toc.addSecNumbers",
@@ -69,8 +68,7 @@
                 "category": "typst-toc"
             }
         ],
-        "menus": {
-        },
+        "menus": {},
         "keybindings": [
             {
                 "command": "typst.extension.editing.toggleBold",
@@ -137,7 +135,6 @@
                     "default": true,
                     "description": "%config.math.enabled%"
                 },
-                
                 "typst.extension.toc.levels": {
                     "type": "string",
                     "default": "1..6",
@@ -203,7 +200,7 @@
                     "items": {
                         "enum": [
                             "rmd",
-                            "quarto", 
+                            "quarto",
                             "typst"
                         ]
                     },
@@ -243,19 +240,24 @@
         "build": "node ./build/build.js",
         "dev-compile": "tsc --build --watch --verbose",
         "pretest": "tsc --build",
-        "test": "node ./out/test/runTest.js"
-    },
-    "dependencies": {
+        "test": "node ./out/test/runTest.js",
+        "test:coverage": "c8 --reporter=text --reporter=html --reporter=lcov --include=out/**/*.js --exclude=out/test/** npm test",
+        "coverage": "npm run test:coverage",
+        "coverage:open": "npm run test:coverage && start coverage/index.html"
     },
     "devDependencies": {
+        "@istanbuljs/nyc-config-typescript": "^1.0.2",
         "@types/katex": "^0.14.0",
         "@types/mocha": "^10.0.0",
         "@types/node": "~14.18.13",
         "@types/vscode": "^1.103.0",
         "@vscode/test-electron": "^2.5.2",
         "@vscode/vsce": "^3.6.0",
+        "c8": "^8.0.1",
+        "cross-env": "^7.0.3",
         "glob": "^11.0.3",
         "mocha": "^11.7.0",
+        "nyc": "^15.1.0",
         "ts-loader": "^9.2.8",
         "typescript": "~4.5.5"
     }

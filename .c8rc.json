@@ -1,0 +1,19 @@
+{
+    "include": [
+        "out/**/*.js"
+    ],
+    "exclude": [
+        "out/test/**",
+        "out/zola-slug/**",
+        "out/**/test/**"
+    ],
+    "reporter": [
+        "text",
+        "html",
+        "lcov"
+    ],
+    "reports-dir": "coverage",
+    "check-coverage": false,
+    "all": true,
+    "skip-full": false
+}

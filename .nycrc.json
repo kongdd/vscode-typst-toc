@@ -1,0 +1,22 @@
+{
+    "extends": "@istanbuljs/nyc-config-typescript",
+    "include": [
+        "out/src/**/*.js"
+    ],
+    "exclude": [
+        "out/test/**",
+        "out/src/test/**",
+        "out/src/zola-slug/**"
+    ],
+    "reporter": [
+        "text",
+        "html",
+        "lcov"
+    ],
+    "report-dir": "coverage",
+    "check-coverage": true,
+    "lines": 80,
+    "functions": 80,
+    "branches": 70,
+    "statements": 80
+}
