@@ -5,6 +5,13 @@
     "icon": "images/typst-mark.png",
     "version": "0.1.1",
     "publisher": "kongdd",
+    "bugs": {
+        "url": "https://github.com/kongdd/vscode-typst-toc/issues"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/kongdd/vscode-typst-toc"
+    },
     "engines": {
         "vscode": "^1.103.0"
     },
@@ -16,13 +23,6 @@
     "keywords": [
         "markdown"
     ],
-    "bugs": {
-        "url": "https://github.com/kongdd/vscode-typst-toc/issues"
-    },
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/kongdd/vscode-typst-toc"
-    },
     "license": "MIT",
     "activationEvents": [
         "onLanguage:markdown",
