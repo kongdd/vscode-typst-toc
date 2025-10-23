@@ -1,9 +1,9 @@
 {
-    "name": "typst-toc-numering",
+    "name": "typst-title-numering",
     "displayName": "%ext.displayName%",
     "description": "%ext.description%",
     "icon": "images/typst-mark.png",
-    "version": "0.1.1",
+    "version": "0.1.2",
     "publisher": "kongdd",
     "bugs": {
         "url": "https://github.com/kongdd/vscode-typst-toc/issues"
